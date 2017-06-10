@@ -19,9 +19,16 @@ module RipperTags
 
     # prepend header and sort lines before closing output
     def with_output
+      @queued_write = []
+
+      if options.append && File.exist?(options.tag_file_name)
+        existing_entries = File.read(options.tag_file_name).lines.map(&:chomp)
+        existing_entries.shift while existing_entries.first =~ /^!/
+        @queued_write.concat existing_entries
+      end
+
       super do |out|
         out.puts header
-        @queued_write = []
         yield out
         @queued_write.sort.each do |line|
           out.puts(line)

@@ -30,6 +30,7 @@ module RipperTags
       :files => %w[.],
       :recursive => false,
       :exclude => %w[.git],
+      :append => false,
       :all_files => false,
       :fields => Set.new,
       :excmd => nil,
@@ -130,6 +131,9 @@ module RipperTags
 
       opts.on("--format (emacs|json|custom)", "Set output format (default: vim)") do |fmt|
         options.format = fmt
+      end
+      opts.on("-a", "--append", "Append the tags to an existing tag file") do
+        options.append = true
       end
       opts.on("-e", "--emacs", "Output Emacs format (default if `--tag-file' is `TAGS')") do
         options.format = "emacs"
